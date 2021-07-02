@@ -2,6 +2,8 @@
 FROM golang:1.16.0-alpine3.13 AS build-env
 
 ARG GH_TOKEN
+RUN apk add build-base git
+RUN git config --global url."https://${GH_TOKEN}:x-oauth-basic@github.com/ProjectAthenaa".insteadOf "https://github.com/ProjectAthenaa"
 RUN mkdir /app
 ADD ./src /app
 WORKDIR /app

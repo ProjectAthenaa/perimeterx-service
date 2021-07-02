@@ -28,6 +28,9 @@ jobs:
         with:
           go-version: 1.16
 
+      - name: Authenticate to Github
+        run: git config --global url."https://${{ secrets.kiwi_token }}:x-oauth-basic@github.com/ProjectAthenaa".insteadOf "https://github.com/ProjectAthenaa"
+
       - name: Download Go Modules
         run: cd src && go mod download
 
@@ -42,7 +45,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_API_KEY }}
 
       - name: Build container image
-        run: DOCKER_BUILDKIT=1 docker build -t registry.digitalocean.com/athenabot/antibots/perimeterx:latest .
+        run: DOCKER_BUILDKIT=1 docker build --build-arg GH_TOKEN=${{ secrets.KIWI_TOKEN }} -t registry.digitalocean.com/athenabot/antibots/perimeterx:latest .
 
       - name: Log in to DigitalOcean Container Registry with short-lived credentials and Push Image
         run: doctl registry login --expiry-seconds 1200 && docker push registry.digitalocean.com/athenabot/antibots/perimeterx:latest
