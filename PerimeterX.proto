@@ -7,7 +7,7 @@ option go_package = "main/perimeterx";
 service PerimeterX{
   rpc PX2(PX2Request) returns (Payload);
   rpc PX3(PXRequest) returns (Payload);
-  rpc GetCookie(CookieRequest) returns (Cookie);
+  rpc GetCookie(CookieRequest) returns (Cookies);
 }
 
 
@@ -17,9 +17,8 @@ message CookieRequest{
   string Proxy = 3;
 }
 
-message Cookie{
-  string Key = 1;
-  string Value = 2;
+message Cookies{
+  map<string, string> Cookie = 1;
 }
 
 
@@ -65,8 +64,6 @@ message Payload{
 }
 
 message PX2Request{
-  string Tag = 1;
-  string Version = 2;
   SITE Site = 3;
   string UserAgent = 4;
 }

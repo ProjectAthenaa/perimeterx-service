@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type PerimeterXClient interface {
 	PX2(ctx context.Context, in *PX2Request, opts ...grpc.CallOption) (*Payload, error)
 	PX3(ctx context.Context, in *PXRequest, opts ...grpc.CallOption) (*Payload, error)
-	GetCookie(ctx context.Context, in *CookieRequest, opts ...grpc.CallOption) (*Cookie, error)
+	GetCookie(ctx context.Context, in *CookieRequest, opts ...grpc.CallOption) (*Cookies, error)
 }
 
 type perimeterXClient struct {
@@ -49,8 +49,8 @@ func (c *perimeterXClient) PX3(ctx context.Context, in *PXRequest, opts ...grpc.
 	return out, nil
 }
 
-func (c *perimeterXClient) GetCookie(ctx context.Context, in *CookieRequest, opts ...grpc.CallOption) (*Cookie, error) {
-	out := new(Cookie)
+func (c *perimeterXClient) GetCookie(ctx context.Context, in *CookieRequest, opts ...grpc.CallOption) (*Cookies, error) {
+	out := new(Cookies)
 	err := c.cc.Invoke(ctx, "/perimeterx.PerimeterX/GetCookie", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -64,7 +64,7 @@ func (c *perimeterXClient) GetCookie(ctx context.Context, in *CookieRequest, opt
 type PerimeterXServer interface {
 	PX2(context.Context, *PX2Request) (*Payload, error)
 	PX3(context.Context, *PXRequest) (*Payload, error)
-	GetCookie(context.Context, *CookieRequest) (*Cookie, error)
+	GetCookie(context.Context, *CookieRequest) (*Cookies, error)
 	mustEmbedUnimplementedPerimeterXServer()
 }
 
@@ -78,7 +78,7 @@ func (UnimplementedPerimeterXServer) PX2(context.Context, *PX2Request) (*Payload
 func (UnimplementedPerimeterXServer) PX3(context.Context, *PXRequest) (*Payload, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PX3 not implemented")
 }
-func (UnimplementedPerimeterXServer) GetCookie(context.Context, *CookieRequest) (*Cookie, error) {
+func (UnimplementedPerimeterXServer) GetCookie(context.Context, *CookieRequest) (*Cookies, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetCookie not implemented")
 }
 func (UnimplementedPerimeterXServer) mustEmbedUnimplementedPerimeterXServer() {}

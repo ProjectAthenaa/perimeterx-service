@@ -36,24 +36,18 @@ func bufDialer(context.Context, string) (net.Conn, error) {
 	return lis.Dial()
 }
 
-func TestPX2(t *testing.T) {
+func TestServer_GetCookie(t *testing.T) {
 	conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
 	helpers.AssertEqual(t, nil, err)
 	defer conn.Close()
 
 	client := px.NewPerimeterXClient(conn)
 
-	resp, err := client.PX2(ctx, &px.PX2Request{
+	resp, err := client.GetCookie(ctx, &px.CookieRequest{
 		Site:      px.SITE_WALMART,
 		UserAgent: userAgent,
-		Tag:       "v6.5.5",
-		Version:   "202",
 	})
 	helpers.AssertEqual(t, nil, err)
-	helpers.AssertEqual(t, "pxur63h57z", resp.AppID)
-	helpers.AssertEqual(t, "0", resp.SEQ)
-	helpers.AssertEqual(t, "NTA", resp.EN)
-	helpers.AssertUnequal(t, 0, len(resp.Value))
-	helpers.AssertUnequal(t, 0, len(resp.PC))
-	helpers.AssertUnequal(t, 0, len(resp.UUID))
+	helpers.AssertEqual(t, 2, len(resp.Cookie))
+
 }
