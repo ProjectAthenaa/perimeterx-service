@@ -17,7 +17,7 @@ const bufSize = 1024 * 1024
 var (
 	ctx       = context.Background()
 	lis       *bufconn.Listener
-	userAgent = "TEST"
+	userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 )
 
 func init() {
@@ -44,8 +44,10 @@ func TestPX2(t *testing.T) {
 	client := px.NewPerimeterXClient(conn)
 
 	resp, err := client.PX2(ctx, &px.PX2Request{
-		Site:      px.SITE_SOLEBOX,
-		UserAgent: &userAgent,
+		Site:      px.SITE_WALMART,
+		UserAgent: userAgent,
+		Tag:       "v6.5.5",
+		Version:   "202",
 	})
 	helpers.AssertEqual(t, nil, err)
 	helpers.AssertEqual(t, "pxur63h57z", resp.AppID)
@@ -55,28 +57,3 @@ func TestPX2(t *testing.T) {
 	helpers.AssertUnequal(t, 0, len(resp.PC))
 	helpers.AssertUnequal(t, 0, len(resp.UUID))
 }
-
-//TODO Finish PX tests
-//func TestPX3(t *testing.T){
-//	conn, err := grpc.DialContext(ctx, "bufnet", grpc.WithContextDialer(bufDialer), grpc.WithInsecure())
-//	helpers.AssertEqual(t, nil, err)
-//	defer conn.Close()
-//
-//	client := px.NewPerimeterXClient(conn)
-//
-//	resp, err := client.PX3(ctx, &px.PXRequest{
-//		Site:           px.SITE_ONYGO,
-//		Type:           px.PXType_PX3,
-//		VarObject:      "",
-//		Version:        "",
-//		Tag:            "",
-//		UA:             "",
-//		Count:          "",
-//		UUID:           "",
-//		SID:            nil,
-//		VID:            "",
-//		CS:             "",
-//		PXHD:           nil,
-//		RecaptchaToken: nil,
-//	})
-//}

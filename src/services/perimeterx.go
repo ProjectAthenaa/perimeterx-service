@@ -18,6 +18,7 @@ type Server struct {
 	px.UnimplementedPerimeterXServer
 }
 
+
 func (s Server) PX2(_ context.Context, request *px.PX2Request) (*px.Payload, error) {
 	uid := uuid.NewV4().String()
 	var encArr []interface{}
@@ -38,14 +39,11 @@ func (s Server) PX2(_ context.Context, request *px.PX2Request) (*px.Payload, err
 		UUID:  uid,
 		SEQ:   "0",
 		EN:    "NTA",
-		//TODO ask fucking omar
-		PC: pxUtils.CreatePC(string(rawPayload), fmt.Sprintf("%s:%s:%s", uid, "", "")),
-		Ua: "",
+		PC:    pxUtils.CreatePC(string(rawPayload), fmt.Sprintf("%s:%s:%s", uid, request.Version, request.Tag)),
+		Ua:    request.UserAgent,
+		RSC: int32(0),
 	}
 
-	if request.UserAgent != nil {
-		payload.Ua = *request.UserAgent
-	}
 	return payload, nil
 }
 
@@ -142,11 +140,6 @@ func (s Server) PX3(_ context.Context, request *px.PXRequest) (*px.Payload, erro
 		SEQ:   strconv.Itoa(count),
 		EN:    "NTA",
 		PC:    pxUtils.CreatePC(string(rawPayload), fmt.Sprintf("%s:%s:%s", uid, request.Version, request.Tag)),
-		CS:    nil,
-		SID:   nil,
-		VID:   nil,
-		RSC:   nil,
-		PXHD:  nil,
 		Ua:    request.UA,
 	}
 
@@ -155,11 +148,9 @@ func (s Server) PX3(_ context.Context, request *px.PXRequest) (*px.Payload, erro
 		resObj.SID = &sid
 		resObj.VID = &vid
 		if count <= 1 {
-			c := int32(count + 1)
-			resObj.RSC = &c
+			resObj.RSC = int32(count + 1)
 		} else {
-			c := int32(count)
-			resObj.RSC = &c
+			resObj.RSC = int32(count + 1)
 		}
 
 		if PXHD != nil {
@@ -169,4 +160,9 @@ func (s Server) PX3(_ context.Context, request *px.PXRequest) (*px.Payload, erro
 	}
 
 	return &resObj, nil
+}
+
+
+func (s Server) GetCookie(ctx context.Context, request *px.CookieRequest) (*px.Cookie, error) {
+	panic("implement me")
 }
