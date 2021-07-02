@@ -20,15 +20,17 @@ enum SITE{
 
 enum PXType{
   PX3 = 0;
-  EVENT = 1;
-  MOE = 2;
-  MME = 3;
-  RE = 4;
-  UAE = 5;
-  BRE = 6;
-  HCAPLOW = 7;
-  HCAPHIGH = 8;
-  RECAP = 9;
+  PX4 = 1;
+  EVENT = 2;
+  MOE = 3;
+  MME = 4;
+  RE = 5;
+  UAE = 6;
+  BRE = 7;
+  HCAPLOW = 8;
+  HCAPHIGH = 9;
+  RECAP = 10;
+  PX34 = 11;
 }
 
 message Payload{
@@ -43,10 +45,9 @@ message Payload{
   optional string CS = 9;
   optional string SID = 10;
   optional string VID = 11;
-  optional string RSC = 12;
+  optional int32 RSC = 12;
   optional string PXHD = 13;
   string Ua = 14;
-  optional string CaptchaToken = 15;
 }
 
 message PX2Request{
@@ -57,13 +58,15 @@ message PX2Request{
 message PXRequest{
   SITE Site = 1;
   PXType Type = 2;
-  string Version = 3;
-  string Tag = 4;
-  string UA = 5;
-  string Count = 6;
-  string UUID = 7;
-  string SID = 8;
-  string VID = 9;
-  string CS = 10;
-  optional string PXHD  = 11;
+  string VarObject = 3;
+  string Version = 4;
+  string Tag = 5;
+  string UA = 6;
+  string Count = 7;
+  string UUID = 8;
+  optional string SID = 9;
+  string VID = 10;
+  string CS = 11;
+  optional string PXHD  = 12;
+  optional string RecaptchaToken = 13;
 }
