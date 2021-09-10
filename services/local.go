@@ -180,7 +180,7 @@ func LocalGetCookie(request *px.CookieRequest) map[string]string {
 	req.Headers = map[string][]string{
 		"User-Agent":   {ua},
 		"Content-Type": {"application/x-www-form-urlencoded"},
-		"Cookies":      {request.Cookies},
+		"Cookie":      {request.Cookies},
 	}
 
 	resp, _ := client.Do(req)
@@ -193,7 +193,7 @@ func LocalGetCookie(request *px.CookieRequest) map[string]string {
 	req.Headers = map[string][]string{
 		"User-Agent":   {ua},
 		"Content-Type": {"application/x-www-form-urlencoded"},
-		"Cookies":      {request.Cookies},
+		"Cookie":      {request.Cookies},
 	}
 
 	resp, _ = client.Do(req)
@@ -206,7 +206,7 @@ func LocalGetCookie(request *px.CookieRequest) map[string]string {
 	req.Headers = map[string][]string{
 		"User-Agent":   {ua},
 		"Content-Type": {"application/x-www-form-urlencoded"},
-		"Cookies":      {request.Cookies},
+		"Cookie":      {request.Cookies},
 	}
 
 	resp, _ = client.Do(req)
@@ -218,7 +218,7 @@ func LocalGetCookie(request *px.CookieRequest) map[string]string {
 	req.Headers = map[string][]string{
 		"User-Agent":   {ua},
 		"Content-Type": {"application/x-www-form-urlencoded"},
-		"Cookies":      {request.Cookies},
+		"Cookie":      {request.Cookies},
 	}
 
 	resp, _ = client.Do(req)
