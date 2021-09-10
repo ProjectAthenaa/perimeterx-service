@@ -1,17 +1,16 @@
 package services
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
-	pxUtils "github.com/ProjectAthenaa/pxutils"
-	uuid "github.com/satori/go.uuid"
-	"io/ioutil"
 	"github.com/ProjectAthenaa/perimeterx-service/helpers"
 	"github.com/ProjectAthenaa/perimeterx-service/payloads"
+	pxUtils "github.com/ProjectAthenaa/pxutils"
+	"github.com/ProjectAthenaa/sonic-core/fasttls"
+	"github.com/ProjectAthenaa/sonic-core/fasttls/tls"
 	px "github.com/ProjectAthenaa/sonic-core/sonic/antibots/perimeterx"
+	uuid "github.com/satori/go.uuid"
 	"math/rand"
-	"net/http"
 	"strconv"
 	"strings"
 )
@@ -170,43 +169,60 @@ func LOCALPX3(sitein px.SITE, reqtype px.PXType, response, countin, uuid, ua, ca
 	return &resObj, nil
 }
 
-func LocalGetCookie(sitein px.SITE, ua string) (map[string]string) {
+func LocalGetCookie(request *px.CookieRequest) map[string]string {
+	sitein := request.Site
+	ua := request.UserAgent
 	//px2
 	px2encpayload, _ := LOCALPX2(sitein, ua)
-	client := http.Client{}
+	client := fasttls.NewClient(tls.HelloChrome_91, &request.Proxy)
 	bodystring := []byte(fmt.Sprintf("payload=%s=&appId=%s&tag=%s&uuid=%s&ft=%s&seq=%s&en=%s&pc=%s&rsc=%s", px2encpayload.Value, px2encpayload.AppID, px2encpayload.Tag, px2encpayload.UUID, px2encpayload.FT, px2encpayload.SEQ, px2encpayload.EN, px2encpayload.PC, strconv.Itoa(int(px2encpayload.RSC))))
-	req, _ := http.NewRequest("POST", "https://collector-pxu6b0qd2s.px-cloud.net/api/v2/collector", bytes.NewBuffer(bodystring))
-	req.Header.Set("User-Agent", ua)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req, _ := client.NewRequest("POST", "https://collector-pxu6b0qd2s.px-cloud.net/api/v2/collector", bodystring)
+	req.Headers = map[string][]string{
+		"User-Agent":   {ua},
+		"Content-Type": {"application/x-www-form-urlencoded"},
+		"Cookies":      {request.Cookies},
+	}
+
 	resp, _ := client.Do(req)
-	body, _ := ioutil.ReadAll(resp.Body)
+	body := resp.Body
 
 	//px3
 	px3encpayload, _ := LOCALPX3(sitein, px.PXType_PX3, string(body), "1", px2encpayload.UUID, ua, "")
 	bodystring = []byte(fmt.Sprintf("payload=%s=&appId=%s&tag=%s&uuid=%s&ft=%s&seq=%s&en=%s&pc=%s&rsc=%ssid=%s&vid=%s&cs=%s", px3encpayload.Value, px3encpayload.AppID, px3encpayload.Tag, px3encpayload.UUID, px3encpayload.FT, px3encpayload.SEQ, px3encpayload.EN, px3encpayload.PC, strconv.Itoa(int(px3encpayload.RSC)), *px3encpayload.SID, *px3encpayload.VID, *px3encpayload.CS))
-	req, _ = http.NewRequest("POST", "https://collector-pxu6b0qd2s.px-cloud.net/api/v2/collector", bytes.NewBuffer(bodystring))
-	req.Header.Set("User-Agent", ua)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req, _ = client.NewRequest("POST", "https://collector-pxu6b0qd2s.px-cloud.net/api/v2/collector", bodystring)
+	req.Headers = map[string][]string{
+		"User-Agent":   {ua},
+		"Content-Type": {"application/x-www-form-urlencoded"},
+		"Cookies":      {request.Cookies},
+	}
+
 	resp, _ = client.Do(req)
-	body, _ = ioutil.ReadAll(resp.Body)
+	body = resp.Body
 
 	//px4
 	px3encpayload, _ = LOCALPX3(sitein, px.PXType_PX4, string(body), "2", px2encpayload.UUID, ua, "")
 	bodystring = []byte(fmt.Sprintf("payload=%s=&appId=%s&tag=%s&uuid=%s&ft=%s&seq=%s&en=%s&pc=%s&rsc=%ssid=%s&vid=%s&cs=%s", px3encpayload.Value, px3encpayload.AppID, px3encpayload.Tag, px3encpayload.UUID, px3encpayload.FT, px3encpayload.SEQ, px3encpayload.EN, px3encpayload.PC, strconv.Itoa(int(px3encpayload.RSC)), *px3encpayload.SID, *px3encpayload.VID, *px3encpayload.CS))
-	req, _ = http.NewRequest("POST", "https://collector-pxu6b0qd2s.px-cloud.net/api/v2/collector", bytes.NewBuffer(bodystring))
-	req.Header.Set("User-Agent", ua)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	resp, _ = client.Do(req)
-	body, _ = ioutil.ReadAll(resp.Body)
+	req, _ = client.NewRequest("POST", "https://collector-pxu6b0qd2s.px-cloud.net/api/v2/collector", bodystring)
+	req.Headers = map[string][]string{
+		"User-Agent":   {ua},
+		"Content-Type": {"application/x-www-form-urlencoded"},
+		"Cookies":      {request.Cookies},
+	}
 
+	resp, _ = client.Do(req)
+	body = resp.Body
 	//EVENT
 	px3encpayload, _ = LOCALPX3(sitein, px.PXType_EVENT, string(body), "3", px2encpayload.UUID, ua, "")
 	bodystring = []byte(fmt.Sprintf("payload=%s=&appId=%s&tag=%s&uuid=%s&ft=%s&seq=%s&en=%s&pc=%s&rsc=%ssid=%s&vid=%s&cs=%s", px3encpayload.Value, px3encpayload.AppID, px3encpayload.Tag, px3encpayload.UUID, px3encpayload.FT, px3encpayload.SEQ, px3encpayload.EN, px3encpayload.PC, strconv.Itoa(int(px3encpayload.RSC)), *px3encpayload.SID, *px3encpayload.VID, *px3encpayload.CS))
-	req, _ = http.NewRequest("POST", "https://collector-pxu6b0qd2s.px-cloud.net/api/v2/collector", bytes.NewBuffer(bodystring))
-	req.Header.Set("User-Agent", ua)
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+	req, _ = client.NewRequest("POST", "https://collector-pxu6b0qd2s.px-cloud.net/api/v2/collector", bodystring)
+	req.Headers = map[string][]string{
+		"User-Agent":   {ua},
+		"Content-Type": {"application/x-www-form-urlencoded"},
+		"Cookies":      {request.Cookies},
+	}
+
 	resp, _ = client.Do(req)
-	body, _ = ioutil.ReadAll(resp.Body)
+	body = resp.Body
 
 	return PX2RESHANDLER(string(body))
 }
