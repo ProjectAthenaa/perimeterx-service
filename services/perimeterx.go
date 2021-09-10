@@ -6,9 +6,9 @@ import (
 	"fmt"
 	pxUtils "github.com/ProjectAthenaa/pxutils"
 	"github.com/satori/go.uuid"
-	"main/helpers"
-	"main/payloads"
-	px "main/services/protos"
+	"github.com/ProjectAthenaa/perimeterx-service/helpers"
+	"github.com/ProjectAthenaa/perimeterx-service/payloads"
+	px "github.com/ProjectAthenaa/perimeterx-service/services/protos"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -159,7 +159,6 @@ func (s Server) PX3(_ context.Context, request *px.PXRequest) (*px.Payload, erro
 
 	return &resObj, nil
 }
-
-func (s Server) GetCookie(ctx context.Context, request *px.CookieRequest) (*px.Cookies, error) {
+func (s Server) GetCookie(_ context.Context, request *px.CookieRequest) (*px.Cookies, error) {
 	return &px.Cookies{Cookie: LocalGetCookie(request.Site, request.UserAgent)}, nil
 }

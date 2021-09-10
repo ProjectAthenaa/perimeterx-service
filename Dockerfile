@@ -1,15 +1,14 @@
 #build stage
-FROM golang:1.16.0-alpine3.13 AS build-env
+FROM golang:1.17.0-alpine3.14 AS build-env
 
 ARG GH_TOKEN
 RUN apk add build-base git
 RUN git config --global url."https://${GH_TOKEN}:x-oauth-basic@github.com/ProjectAthenaa".insteadOf "https://github.com/ProjectAthenaa"
 RUN mkdir /app
-ADD ./src /app
+ADD . /app
 WORKDIR /app
 RUN --mount=type=cache,target=/root/.cache/go-build
-RUN go mod download
-RUN go build -o goapp
+RUN go build -ldflags "-s -w" -o goapp
 
 
 # final stage

@@ -5,9 +5,9 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/test/bufconn"
 	"log"
-	"main/helpers"
-	"main/services"
-	px "main/services/protos"
+	"github.com/ProjectAthenaa/perimeterx-service/helpers"
+	"github.com/ProjectAthenaa/perimeterx-service/services"
+	px "github.com/ProjectAthenaa/perimeterx-service/services/protos"
 	"net"
 	"testing"
 )

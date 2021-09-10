@@ -3,8 +3,8 @@ package main
 import (
 	"google.golang.org/grpc"
 	"log"
-	"main/services"
-	px "main/services/protos"
+	"github.com/ProjectAthenaa/perimeterx-service/services"
+	px "github.com/ProjectAthenaa/perimeterx-service/services/protos"
 	"net"
 )
 
