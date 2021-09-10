@@ -1,6 +1,8 @@
 package helpers
 
-import px "github.com/ProjectAthenaa/perimeterx-service/services/protos"
+import (
+	px "github.com/ProjectAthenaa/sonic-core/sonic/antibots/perimeterx"
+)
 
 func ConvertToSite(site px.SITE) Site {
 	switch site {

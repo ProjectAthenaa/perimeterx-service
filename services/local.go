@@ -9,7 +9,7 @@ import (
 	"io/ioutil"
 	"github.com/ProjectAthenaa/perimeterx-service/helpers"
 	"github.com/ProjectAthenaa/perimeterx-service/payloads"
-	px "github.com/ProjectAthenaa/perimeterx-service/services/protos"
+	px "github.com/ProjectAthenaa/sonic-core/sonic/antibots/perimeterx"
 	"math/rand"
 	"net/http"
 	"strconv"
