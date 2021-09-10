@@ -12,7 +12,15 @@ require (
 )
 
 require (
+	github.com/DataDog/zstd v1.4.8 // indirect
+	github.com/andybalholm/brotli v1.0.3 // indirect
+	github.com/dsnet/compress v0.0.1 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/klauspost/compress v1.13.4 // indirect
+	github.com/useflyent/fhttp v0.0.0-20210801005649-f160dd923789 // indirect
+	github.com/valyala/bytebufferpool v1.0.0 // indirect
+	github.com/valyala/fastrand v1.0.0 // indirect
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/net v0.0.0-20210610132358-84b48f89b13b // indirect
 	golang.org/x/sys v0.0.0-20210820121016-41cdb8703e55 // indirect
 	golang.org/x/text v0.3.7 // indirect
