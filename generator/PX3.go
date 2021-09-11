@@ -1,27 +1,14 @@
-package payloads
+package generator
 
 import (
-	pxutils "github.com/incizzle/perimeterx-utils-go"
+	"github.com/ProjectAthenaa/perimeterx/responsedeob"
+	"github.com/ProjectAthenaa/perimeterx/siteconstants"
+	"github.com/ProjectAthenaa/pxutils"
 	"math/rand"
 	"strconv"
 	"strings"
 )
 
-type PX2 struct {
-	T string `json:"t"`
-	D struct {
-		PX371  bool	  `json:"PX371"`
-		PX96   string `json:"PX96"`
-		PX63   string `json:"PX63"`
-		PX191  int    `json:"PX191"`
-		PX850  int    `json:"PX850"`
-		PX851  int    `json:"PX851"`
-		PX1008 int    `json:"PX1008"`
-		PX1055 int64  `json:"PX1055"`
-		PX1056 int64  `json:"PX1056"`
-		PX1038 string `json:"PX1038"`
-	} `json:"d"`
-}
 type PX3 struct {
 	T string `json:"t"`
 	D struct {
@@ -38,7 +25,7 @@ type PX3 struct {
 		PX196  bool          `json:"PX196"`
 		PX207  bool          `json:"PX207"`
 		PX251  bool          `json:"PX251"`
-		PX982  int64         `json:"PX982"`
+		PX982  int           `json:"PX982"`
 		PX983  string        `json:"PX983"`
 		PX986  string        `json:"PX986"`
 		PX985  int           `json:"PX985"`
@@ -143,139 +130,128 @@ type PX3 struct {
 	} `json:"d"`
 }
 
-func(this *PX2) Instantiate(site, uuid string){
-	this.T = "PX2"
-	this.D.PX371 = true
-	this.D.PX96 = site
-	this.D.PX63 = "Win32"
-	this.D.PX191 = 0
-	this.D.PX850 = 0
-	this.D.PX851 = 500 + rand.Intn(100)
-	this.D.PX1008 = 3600
-	this.D.PX1055 = generateTimestamp()
-	this.D.PX1056 = generateTimestamp()
-	this.D.PX1038 = uuid
+func GeneratePX3(uuid string, resobj responsedeob.ResponseJSON, sitedata *siteconstants.SiteData) []PX3{
+	px3obj := InstantiatePX3(uuid)
+	px3obj.D.PX983 = resobj.CLS0
+	px3obj.D.PX986 = resobj.CLS1
+	px3obj.D.PX985, _ = strconv.Atoi(resobj.DRC)
+	px3obj.D.PX943 = resobj.WCS
+	px3obj.D.PX357 = pxutils.H1(resobj.VID, siteconstants.UA)
+	px3obj.D.PX358 = pxutils.H1(resobj.SID, siteconstants.UA)
+    px3obj.D.PX96 = sitedata.Url
+	return []PX3{px3obj}
 }
-func(this *PX3) Instantiate(site, uuid, varobj, ua string){
-	this.T = "PX3"
-	px2res := PX2RESHANDLER(varobj)
-	this.D.PX371 = true
-	this.D.PX234 = false
-	this.D.PX235 = false
-	this.D.PX151 = false
-	this.D.PX239 = false
-	this.D.PX240 = false
-	this.D.PX152 = false
-	this.D.PX153 = false
-	this.D.PX314 = false
-	this.D.PX192 = false
-	this.D.PX196 = false
-	this.D.PX207 = false
-	this.D.PX251 = false
-	this.D.PX982 = generateTimestamp()
-	this.D.PX983 = strings.Split(px2res["cls"],"|")[0]
-	this.D.PX986 = strings.Split(px2res["cls"],"|")[1]
-	this.D.PX985, _ = strconv.Atoi(px2res["drc"])
-	this.D.PX1033 = "e0eaf10e"
-	this.D.PX1019 = "3f2b5a30"
-	this.D.PX1020 = "7766a52d"
-	this.D.PX1021 = "714b1317"
-	this.D.PX1022 = "6a90378d"
-	this.D.PX1035 = false
-	this.D.PX1025 = false
-	this.D.PX359 = pxutils.H1(uuid, ua)
-	this.D.PX943 = px2res["wcs"]
-	this.D.PX357 = pxutils.H1(strings.Split(px2res["vid"],"|")[0], ua)
-	if v, ok := px2res["sid"]; ok{
-		this.D.PX358 = pxutils.H1(v, ua)
-	}else{
-		this.D.PX358 = pxutils.H1(uuid, ua)
-	}
-	this.D.PX229 = 24
-	this.D.PX230 = 24
-	this.D.PX91 = 1920
-	this.D.PX92 = 1080
-	this.D.PX269 = 3778
-	this.D.PX270 = 1080
-	this.D.PX93 = "3840X1080"
-	this.D.PX185 = 950 + rand.Intn(120)
-	this.D.PX186 = 350 + rand.Intn(50)
-	this.D.PX187 = 0
-	this.D.PX188 = 0
-	this.D.PX95 = true
-	this.D.PX400 = 111
-	this.D.PX404 = "144|54|54|180|68"
-	this.D.PX90 = []string{"loadTimes", "csi", "app", "runtime"}
-	this.D.PX190 = ""
-	this.D.PX552 = "false"
-	this.D.PX399 = "false"
-	this.D.PX549 = 1
-	this.D.PX411 = 1
-	this.D.PX402 = 1
-	this.D.PX548 = 1
-	this.D.PX405 = true
-	this.D.PX547 = true
-	this.D.PX134 = true
-	this.D.PX89 = true
-	this.D.PX170 = 3
-	this.D.PX85 = []string{"Chrome PDF Plugin", "Chrome PDF Viewer", "Native Client"}
-	this.D.PX59 = ua
-	this.D.PX61 = "en-US"
-	this.D.PX313 = []string{"en-US"}
-	this.D.PX63 = "Win32"
-	this.D.PX86 = true
-	this.D.PX154 = 240
-	this.D.PX133 = true
-	this.D.PX88 = true
-	this.D.PX169 = 4 //most likely core count
-	this.D.PX62 = "Gecko"
-	this.D.PX69 = "20030107"
-	this.D.PX64 = strings.SplitN(ua, "/", 2)[1]
-	this.D.PX65 = "Netscape"
-	this.D.PX66 = "Mozilla"
-	this.D.PX60 = true
-	this.D.PX87 = true
-	this.D.PX821 = 4294705152 //total memory
-	this.D.PX822 = 10000000 + rand.Intn(40000000)
-	this.D.PX823 = this.D.PX822 - 2000000 - rand.Intn(8000000)
-	this.D.PX147 = false
-	this.D.PX155 = "Fri Apr 02 2021 00:31:32 GMT-0400 (Eastern Daylight Time)" // timezone
-	this.D.PX236 = false
-	this.D.PX194 = false
-	this.D.PX195 = true
-	this.D.PX237 = 0
-	this.D.PX238 = "missing"
-	this.D.PX208 = "visible"
-	this.D.PX218 = 0
-	this.D.PX231 = 1087
-	this.D.PX232 = 1903
-	this.D.PX254 = false
-	this.D.PX295 = false
-	this.D.PX268 = false
-	this.D.PX166 = true
-	this.D.PX138 = true
-	this.D.PX143 = true
-	this.D.PX714 = "64556c77"
-	this.D.PX715 = ""
-	this.D.PX724 = "10207b2f"
-	this.D.PX725 = "10207b2f"
-	this.D.PX729 = "90e65465"
-	this.D.PX443 = true
-	this.D.PX466 = true
-	this.D.PX467 = true
-	this.D.PX468 = true
-	this.D.PX191 = 0
-	this.D.PX94 = 1 + rand.Intn(2)
-	this.D.PX120 = []interface{}{}
-	this.D.PX141 = false
-	this.D.PX96 = site
-	this.D.PX55 = ""
-	this.D.PX1065 = 1
-	this.D.PX850 = 1
-	this.D.PX851 = 7000 + rand.Intn(1500)
-	this.D.PX1054 = 1617355508198
-	this.D.PX1008 = 3600
-	this.D.PX1055 = 1617355501361
-	this.D.PX1056 = 1617355521093
-	this.D.PX1038 = uuid
+
+func InstantiatePX3(uuid string) PX3{
+	var payload PX3
+	payload.T = "PX3"
+	payload.D.PX371 = true
+	payload.D.PX234 = false
+	payload.D.PX235 = false
+	payload.D.PX151 = false
+	payload.D.PX239 = false
+	payload.D.PX240 = false
+	payload.D.PX152 = false
+	payload.D.PX153 = false
+	payload.D.PX314 = false
+	payload.D.PX192 = false
+	payload.D.PX196 = false
+	payload.D.PX207 = false
+	payload.D.PX251 = false
+	payload.D.PX982 = GenerateTimestamp()
+	payload.D.PX1033 = "e0eaf10e"
+	payload.D.PX1019 = "3f2b5a30"
+	payload.D.PX1020 = "7766a52d"
+	payload.D.PX1021 = "714b1317"
+	payload.D.PX1022 = "6a90378d"
+	payload.D.PX1035 = false
+	payload.D.PX1025 = false
+	payload.D.PX359 = pxutils.H1(uuid, siteconstants.UA)
+	payload.D.PX229 = 24
+	payload.D.PX230 = 24
+	payload.D.PX91 = 1920
+	payload.D.PX92 = 1080
+	payload.D.PX269 = 3778
+	payload.D.PX270 = 1080
+	payload.D.PX93 = "3840X1080"
+	payload.D.PX185 = 950 + rand.Intn(120)
+	payload.D.PX186 = 350 + rand.Intn(50)
+	payload.D.PX187 = 0
+	payload.D.PX188 = 0
+	payload.D.PX95 = true
+	payload.D.PX400 = 111
+	payload.D.PX404 = "144|54|54|180|68"
+	payload.D.PX90 = []string{"loadTimes", "csi", "app", "runtime"}
+	payload.D.PX190 = ""
+	payload.D.PX552 = "false"
+	payload.D.PX399 = "false"
+	payload.D.PX549 = 1
+	payload.D.PX411 = 1
+	payload.D.PX402 = 1
+	payload.D.PX548 = 1
+	payload.D.PX405 = true
+	payload.D.PX547 = true
+	payload.D.PX134 = true
+	payload.D.PX89 = true
+	payload.D.PX170 = 3
+	payload.D.PX85 = []string{"Chrome PDF Plugin", "Chrome PDF Viewer", "Native Client"}
+	payload.D.PX59 = siteconstants.UA
+	payload.D.PX61 = "en-US"
+	payload.D.PX313 = []string{"en-US"}
+	payload.D.PX63 = "Win32"
+	payload.D.PX86 = true
+	payload.D.PX154 = 240
+	payload.D.PX133 = true
+	payload.D.PX88 = true
+	payload.D.PX169 = 4 //most likely core count
+	payload.D.PX62 = "Gecko"
+	payload.D.PX69 = "20030107"
+	payload.D.PX64 = strings.SplitN(siteconstants.UA, "/", 2)[1]
+	payload.D.PX65 = "Netscape"
+	payload.D.PX66 = "Mozilla"
+	payload.D.PX60 = true
+	payload.D.PX87 = true
+	payload.D.PX821 = 4294705152 //total memory
+	payload.D.PX822 = 10000000 + rand.Intn(40000000)
+	payload.D.PX823 = payload.D.PX822 - 2000000 - rand.Intn(8000000)
+	payload.D.PX147 = false
+	payload.D.PX155 = "Fri Apr 02 2021 00:31:32 GMT-0400 (Eastern Daylight Time)" // timezone
+	payload.D.PX236 = false
+	payload.D.PX194 = false
+	payload.D.PX195 = true
+	payload.D.PX237 = 0
+	payload.D.PX238 = "missing"
+	payload.D.PX208 = "visible"
+	payload.D.PX218 = 0
+	payload.D.PX231 = 1087
+	payload.D.PX232 = 1903
+	payload.D.PX254 = false
+	payload.D.PX295 = false
+	payload.D.PX268 = false
+	payload.D.PX166 = true
+	payload.D.PX138 = true
+	payload.D.PX143 = true
+	payload.D.PX714 = "64556c77"
+	payload.D.PX715 = ""
+	payload.D.PX724 = "10207b2f"
+	payload.D.PX725 = "10207b2f"
+	payload.D.PX729 = "90e65465"
+	payload.D.PX443 = true
+	payload.D.PX466 = true
+	payload.D.PX467 = true
+	payload.D.PX468 = true
+	payload.D.PX191 = 0
+	payload.D.PX94 = 1 + rand.Intn(2)
+	payload.D.PX120 = []interface{}{}
+	payload.D.PX141 = false
+	payload.D.PX55 = ""
+	payload.D.PX1065 = 1
+	payload.D.PX850 = 1
+	payload.D.PX851 = 7000 + rand.Intn(1500)
+	payload.D.PX1054 = 1617355508198
+	payload.D.PX1008 = 3600
+	payload.D.PX1055 = 1617355501361
+	payload.D.PX1056 = 1617355521093
+	payload.D.PX1038 = uuid
+	return payload
 }
