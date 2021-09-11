@@ -2,163 +2,64 @@ package services
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	"github.com/ProjectAthenaa/perimeterx-service/helpers"
-	"github.com/ProjectAthenaa/perimeterx-service/payloads"
-	pxUtils "github.com/ProjectAthenaa/pxutils"
+	"errors"
+	"github.com/ProjectAthenaa/perimeterx-service/generator"
+	"github.com/ProjectAthenaa/perimeterx-service/responsedeob"
+	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
 	px "github.com/ProjectAthenaa/sonic-core/sonic/antibots/perimeterx"
-	"github.com/satori/go.uuid"
 	"math/rand"
-	"strconv"
-	"strings"
+	"time"
 )
 
 type Server struct {
 	px.UnimplementedPerimeterXServer
 }
 
-func (s Server) PX2(_ context.Context, request *px.PX2Request) (*px.Payload, error) {
-	uid := uuid.NewV4().String()
-	var encArr []interface{}
+func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.ConstructPayloadResponse, error) {
+	rand.Seed(time.Now().UnixNano())
+	SITE := siteconstants.SiteDataHolder[payload.Site]
+	TYPE := payload.Type
 
-	site := helpers.ConvertToSite(request.Site)
+	var UUID, TOKEN, COOKIE string
+	var RSC int
+	var resobj responsedeob.ResponseJSON
 
-	addReqObj := payloads.PX2{}
-	addReqObj.Instantiate(site.Site, uid)
-	encArr = append(encArr, addReqObj)
-
-	rawPayload, err := json.Marshal(encArr)
-	if err != nil {
-		return nil, err
-	}
-	payload := &px.Payload{
-		Value: pxUtils.EncodePayload(string(rawPayload), 50),
-		AppID: site.Sitekey,
-		UUID:  uid,
-		SEQ:   "0",
-		EN:    "NTA",
-		PC:    pxUtils.CreatePC(string(rawPayload), fmt.Sprintf("%s:%s:%s", uid, site.Version, site.Tag)),
-		Ua:    request.UserAgent,
-		RSC:   int32(0),
-	}
-
-	return payload, nil
-}
-func (s Server) PX3(_ context.Context, request *px.PXRequest) (*px.Payload, error) {
-	var encArr []interface{}
-
-	site := helpers.ConvertToSite(request.Site)
-	var sid string
-	uid := request.UUID
-	vid := strings.SplitN(request.VID, "|", 2)[0]
-	cs := request.CS
-	PXHD := request.PXHD
-	count, err := strconv.Atoi(request.Count)
-	if err != nil {
-		return nil, err
-	}
-
-	if request.SID == nil {
-		sid = uid
+	if TYPE == px.PXType_PX3 || TYPE == px.PXType_PX34 {
+		UUID = generator.GenerateUUID()
+	} else if TYPE == px.PXType_HCAPHIGH || TYPE == px.PXType_RECAP || TYPE == px.PXType_HCAPLOW {
+		COOKIE, resobj = responsedeob.SplitResponse(payload.ResponseObject)
+		TOKEN = payload.Token
 	} else {
-		sid = *request.SID
+		COOKIE, resobj = responsedeob.SplitResponse(payload.ResponseObject)
+		RSC = int(payload.RSC)
 	}
 
-	switch request.Type {
-	case px.PXType_PX3:
-		if request.VarObject == "undefined" {
-			return nil, noResponseToParse
-		}
-
-		addReqObj := payloads.PX3{}
-		addReqObj.Instantiate(site.Site, uid, request.VarObject, request.UA)
-		encArr = append(encArr, addReqObj)
-	case px.PXType_PX4:
-		if request.VarObject == "undefined" {
-			return nil, noResponseToParse
-		}
-		px4add := payloads.PX4{}
-		px4add.Instantiate(uid, site.Sitekey, request.UA, 2)
-		encArr = append(encArr, px4add)
-	case px.PXType_PX34:
-		if request.VarObject == "undefined" {
-			return nil, noResponseToParse
-		}
-		px3add := payloads.PX3{}
-		px3add.Instantiate(site.Site, uid, request.VarObject, request.UA)
-		px4add := payloads.PX4{}
-		px4add.Instantiate(uid, site.Sitekey, request.UA, 2)
-		encArr = append(encArr, px3add, px4add)
-	case px.PXType_EVENT:
-		encArr = payloads.MixedArrayGenerate(site.Site, uid, sid, vid, request.UA, 4+rand.Intn(10), 2+rand.Intn(2))
-	case px.PXType_MOE:
-		addReqObj := payloads.MouseOverEvent{}
-		addReqObj.Instantiate(sid, uid, site.Sitekey, 2+rand.Intn(3))
-		encArr = append(encArr, addReqObj)
-	case px.PXType_MME:
-		addReqObj := payloads.MouseMoveEvent{}
-		addReqObj.Instantiate(sid, uid, 2+rand.Intn(3))
-		encArr = append(encArr, addReqObj)
-	case px.PXType_RE:
-		for _, v := range payloads.RequestEventGenerate(site.Site, uid, sid, vid, 4+rand.Intn(10), 2+rand.Intn(2)) {
-			encArr = append(encArr, v)
-		}
-	case px.PXType_UAE:
-		for _, v := range payloads.UserAgentEventGenerate(site.Site, uid, sid, vid, request.UA, 4+rand.Intn(10), 2+rand.Intn(2)) {
-			encArr = append(encArr, v)
-		}
-	case px.PXType_BRE:
-		for _, v := range payloads.BrowserRequestEventGenerate(site.Site, uid, sid, vid, 4+rand.Intn(10), 2+rand.Intn(2)) {
-			encArr = append(encArr, v)
-		}
-	case px.PXType_HCAPLOW:
-		encArr = payloads.LOWSECHCAPGENERATE(uid, vid, site.Site, site.Sitekey)
-	case px.PXType_HCAPHIGH:
-		encArr = payloads.HIGHSECHCAPGENERATE(uid, vid, site.Site, site.Sitekey, request.UA)
+	switch TYPE {
+	case px.PXType_PX3, px.PXType_PX34:
+		bytePayload, err := generator.GenInit(&SITE, UUID)
+		return &px.ConstructPayloadResponse{
+			Cookie:  COOKIE,
+			Payload: bytePayload,
+		}, err
+	case px.PXType_RE, px.PXType_BRE, px.PXType_MME, px.PXType_MOE, px.PXType_UAE, px.PXType_EVENT:
+		bytePayload, err := generator.GenEvents(&SITE, UUID, resobj, RSC)
+		return &px.ConstructPayloadResponse{
+			Cookie:  COOKIE,
+			Payload: bytePayload,
+		}, err
+	case px.PXType_HCAPHIGH, px.PXType_HCAPLOW:
+		bytePayload, err := generator.GenHoldCaptcha(&SITE, UUID, resobj, TOKEN)
+		return &px.ConstructPayloadResponse{
+			Cookie:  COOKIE,
+			Payload: bytePayload,
+		}, err
 	case px.PXType_RECAP:
-		token := request.RecaptchaToken
-		if token == nil {
-			return nil, missingRecaptchaToken
-		}
-		encArr = append(encArr, payloads.RECAPGENERATE(uid, vid, site.Site, site.Sitekey, *token))
+		bytePayload, err := generator.GenReCaptcha(&SITE, UUID, resobj)
+		return &px.ConstructPayloadResponse{
+			Cookie:  COOKIE,
+			Payload: bytePayload,
+		}, err
 	}
 
-	rawPayload, err := json.Marshal(encArr)
-	if err != nil {
-		return nil, err
-	}
-
-	resObj := px.Payload{
-		Value: pxUtils.EncodePayload(string(rawPayload), 50),
-		AppID: site.Sitekey,
-		Tag:   request.Version,
-		UUID:  uid,
-		FT:    request.Tag,
-		SEQ:   strconv.Itoa(count),
-		EN:    "NTA",
-		PC:    pxUtils.CreatePC(string(rawPayload), fmt.Sprintf("%s:%s:%s", uid, request.Version, request.Tag)),
-		Ua:    request.UA,
-	}
-
-	if request.SID != nil {
-		resObj.CS = &cs
-		resObj.SID = &sid
-		resObj.VID = &vid
-		if count <= 1 {
-			resObj.RSC = int32(count + 1)
-		} else {
-			resObj.RSC = int32(count + 1)
-		}
-
-		if PXHD != nil {
-			resObj.PXHD = PXHD
-		}
-
-	}
-
-	return &resObj, nil
-}
-func (s Server) GetCookie(_ context.Context, request *px.CookieRequest) (*px.Cookies, error) {
-	return &px.Cookies{Cookie: LocalGetCookie(request)}, nil
+	return nil, errors.New("could not create payload")
 }
