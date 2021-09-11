@@ -2,7 +2,7 @@ package generator
 
 import (
 	"fmt"
-	"github.com/ProjectAthenaa/perimeterx/siteconstants"
+	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
 	"math/rand"
 	"strings"
 )

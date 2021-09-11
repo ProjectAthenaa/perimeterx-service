@@ -1,8 +1,8 @@
 package generator
 
 import (
-	"github.com/ProjectAthenaa/perimeterx/responsedeob"
-	"github.com/ProjectAthenaa/perimeterx/siteconstants"
+	"github.com/ProjectAthenaa/perimeterx-service/responsedeob"
+	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
 	"github.com/ProjectAthenaa/pxutils"
 	"math/rand"
 	"strconv"
