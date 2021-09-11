@@ -28,7 +28,7 @@ func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.
 		UUID = generator.GenerateUUID()
 	} else if TYPE == px.PXType_HCAPHIGH || TYPE == px.PXType_RECAP || TYPE == px.PXType_HCAPLOW {
 		COOKIE, resobj = responsedeob.SplitResponse(payload.ResponseObject)
-		TOKEN = payload.Token
+		TOKEN = resobj.HTMLCITOKEN
 	} else {
 		COOKIE, resobj = responsedeob.SplitResponse(payload.ResponseObject)
 		RSC = int(payload.RSC)
@@ -62,4 +62,9 @@ func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.
 	}
 
 	return nil, errors.New("could not create payload")
+}
+
+func (s Server) GetCookie(ctx context.Context, req *px.GetCookieRequest) (*px.Cookie, error){
+	cookie, _ := responsedeob.SplitResponse(req.PXResponse)
+	return &px.Cookie{Value: cookie}, nil
 }

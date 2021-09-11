@@ -17,6 +17,7 @@ type ResponseJSON struct{
 	CI 		string `json:"ci"`
 	CP 		string `json:"cp"`
 	CITOKEN string `json:"citoken"`
+	HTMLCITOKEN string `json:"htmlcitoken"`
 }
 
 type ResponseJSONRaw struct{
@@ -48,8 +49,9 @@ func SplitResponse(resstring []byte) (string, ResponseJSON){
 			case "ci":
 				resobj.CI = split[3]
 				resobj.CITOKEN = split[2]
+				resobj.HTMLCITOKEN = split[4]
 			case "cp":
-				resobj.CI = split[2]
+				resobj.CP = split[2]
 			case "en", "bake":
 				cookie = split[3]
 				break Iterator
