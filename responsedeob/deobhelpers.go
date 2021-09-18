@@ -16,6 +16,7 @@ type ResponseJSON struct{
 	DRC  	string `json:"drc"`
 	CI 		string `json:"ci"`
 	CP 		string `json:"cp"`
+	CTS 	string `json:"cts"`
 	CITOKEN string `json:"citoken"`
 	HTMLCITOKEN string `json:"htmlcitoken"`
 }
@@ -50,6 +51,8 @@ func SplitResponse(resstring []byte) (string, ResponseJSON){
 				resobj.CI = split[3]
 				resobj.CITOKEN = split[2]
 				resobj.HTMLCITOKEN = split[4]
+			case "cts":
+				resobj.CTS = split[1]
 			case "cp":
 				resobj.CP = split[2]
 			case "en", "bake":

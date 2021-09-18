@@ -1,12 +1,16 @@
 package generator
 
 import (
+	"fmt"
 	"github.com/ProjectAthenaa/perimeterx-service/responsedeob"
 	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
-	"encoding/json"
+	"github.com/ProjectAthenaa/pxutils"
+	jsoniter "github.com/json-iterator/go"
 	"math/rand"
 	"strconv"
 )
+
+var json = jsoniter.ConfigFastest
 
 
 type PayloadOut struct{
@@ -24,42 +28,114 @@ type PayloadOut struct{
 	Rsc		string `json:"rsc"`
 }
 
-func GenInit(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
-	var payload PayloadOut
-	GeneratePX2(UUID, sitedata)
+func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
+	rp, err := json.Marshal(GeneratePX2(UUID, sitedata))
+	if err != nil{
+		return nil, err
+	}
 
-	var tempresobj responsedeob.ResponseJSON
-	GeneratePX3(UUID, tempresobj, sitedata)
-	return json.Marshal(payload)
+	return json.Marshal(&PayloadOut{
+		Payload: pxutils.EncodePayload(string(rp), 50),
+		AppID:   sitedata.AppId,
+		Tag:     sitedata.Tag,
+		Uuid:    UUID,
+		Ft:      sitedata.Ft,
+		Seq:     "0",
+		En:      "NTA",
+		Pc:      pxutils.CreatePC(string(rp), fmt.Sprintf(`%s:%s:%s`, UUID, sitedata.Tag, sitedata.Ft)),
+		Rsc:     "1",
+	})
+}
+
+func GenPX3(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.ResponseJSON) ([]byte, error){
+	rp, err := json.Marshal(GeneratePX3(UUID, resobj, sitedata))
+	if err != nil{
+		return nil, err
+	}
+	return json.Marshal(&PayloadOut{
+		Payload: pxutils.EncodePayload(string(rp), 50),
+		AppID:   sitedata.AppId,
+		Tag:     sitedata.Tag,
+		Uuid:    UUID,
+		Ft:      sitedata.Ft,
+		Seq:     "1",
+		En:      "NTA",
+		Pc:      pxutils.CreatePC(string(rp), fmt.Sprintf(`%s:%s:%s`, UUID, sitedata.Tag, sitedata.Ft)),
+		Sid:     resobj.SID,
+		Vid:     resobj.VID,
+		Cts:     resobj.CTS,
+		Rsc:     "2",
+	})
 }
 
 func GenEvents(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.ResponseJSON, rsc int) ([]byte, error){
-	var payload PayloadOut
-
+	var events []interface{}
 	switch rand.Intn(4){
 	case 0:
-		GenerateMouseOverEvent(resobj.SID, resobj.VID, UUID, sitedata, rsc)
+		for _, event := range GenerateMouseOverEvent(resobj.SID, resobj.VID, UUID, sitedata, rsc){
+			events = append(events, event)
+		}
 	case 1:
-		GenerateMouseMoveEvent(UUID, sitedata, rsc)
+		for _, event := range GenerateMouseMoveEvent(UUID, sitedata, rsc){
+			events = append(events, event)
+		}
 	case 2:
-		GenerateRequestEvent(sitedata)
+		for _, event := range GenerateRequestEvent(sitedata){
+			events = append(events, event)
+		}
 	case 3:
-		GenerateUserAgentEvent(resobj.SID, resobj.VID, UUID, sitedata)
+		for _, event := range GenerateUserAgentEvent(resobj.SID, resobj.VID, UUID, sitedata){
+			events = append(events, event)
+		}
 	}
 
-	return json.Marshal(payload)
+	rp, err := json.Marshal(events)
+	if err != nil{
+		return nil, err
+	}
+
+	return json.Marshal(&PayloadOut{
+		Payload: pxutils.EncodePayload(string(rp), 50),
+		AppID:   sitedata.AppId,
+		Tag:     sitedata.Tag,
+		Uuid:    UUID,
+		Ft:      sitedata.Ft,
+		Seq:     "3",
+		En:      "NTA",
+		Pc:      pxutils.CreatePC(string(rp), fmt.Sprintf(`%s:%s:%s`, UUID, sitedata.Tag, sitedata.Ft)),
+		Sid:     resobj.SID,
+		Vid:     resobj.VID,
+		Cts:     resobj.CTS,
+		Rsc:     "3",
+	})
 }
 
 func GenHoldCaptcha(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.ResponseJSON, token string) ([]byte, error){
-	var payload PayloadOut
 	duration, _ := strconv.Atoi(resobj.CI)
-	GenerateHCAP(UUID, resobj.VID, token, resobj.CP, resobj.CITOKEN, duration, sitedata)
-	return json.Marshal(payload)
+	rp, err := json.Marshal(GenerateHCAP(UUID, resobj.VID, token, resobj.CP, resobj.CITOKEN, duration, sitedata))
+	if err != nil{
+		return nil, err
+	}
+	return json.Marshal(&PayloadOut{
+		Payload: pxutils.EncodePayload(string(rp), 50),
+		AppID:   sitedata.AppId,
+		Tag:     sitedata.Tag,
+		Uuid:    UUID,
+		Ft:      sitedata.Ft,
+		Seq:     "3",
+		En:      "NTA",
+		Pc:      pxutils.CreatePC(string(rp), fmt.Sprintf(`%s:%s:%s`, UUID, sitedata.Tag, sitedata.Ft)),
+		Sid:     resobj.SID,
+		Vid:     resobj.VID,
+		Cts:     resobj.CTS,
+		Rsc:     "3",
+	})
 }
 
-func GenReCaptcha(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.ResponseJSON) ([]byte, error){
-	var payload PayloadOut
-
-	GenReCaptcha(sitedata, UUID, resobj)
-	return json.Marshal(payload)
-}
+//todo implement
+//func GenReCaptcha(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.ResponseJSON) ([]byte, error){
+//	var payload PayloadOut
+//
+//	GenReCaptcha(sitedata, UUID, resobj)
+//	return json.Marshal(&payload)
+//}

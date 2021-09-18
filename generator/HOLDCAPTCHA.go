@@ -72,18 +72,18 @@ type HCAPPAYLOAD struct {
 
 func GenerateHCAP(uuid, vid, token, cp, recaptoken string, holdduration int, sitedata *siteconstants.SiteData) []interface{}{
 	var outarr []interface{}
-	px4obj := InstantiatePX4(uuid, sitedata.Key)
+	px4obj := InstantiatePX4(uuid, sitedata.AppId)
 	outarr = append(outarr, px4obj)
 
-	event1 := InstantiateMouseOverEvent(sitedata.Url, uuid, sitedata.Key, 4)
+	event1 := InstantiateMouseOverEvent(sitedata.Url, uuid, sitedata.AppId, 4)
 	event1.D.PX96 = sitedata.Url
 	outarr = append(outarr, event1)
 
-	hcapobj := InstantiateHCAP(uuid, token, cp, sitedata.Key, holdduration)
+	hcapobj := InstantiateHCAP(uuid, token, cp, sitedata.AppId, holdduration)
 	hcapobj.D.PX96 = sitedata.Url
 	outarr = append(outarr, hcapobj)
 
-	recapobj := InstantiateRECAP(uuid, vid, sitedata.Url, sitedata.Key, "pxCaptcha", "PX560", recaptoken)
+	recapobj := InstantiateRECAP(uuid, vid, sitedata.Url, sitedata.AppId, "pxCaptcha", "PX560", recaptoken)
 	outarr = append(outarr, recapobj)
 
 	event2 := InstantiateMouseMoveEvent(uuid, 6)

@@ -7,7 +7,7 @@ type SiteData struct {
 	Ft		string
 	Url 	string
 	Host 	string
-	Key		string
+	AppId	string
 }
 
 var SiteDataHolder = map[perimeterx.SITE]SiteData{
@@ -16,6 +16,6 @@ var SiteDataHolder = map[perimeterx.SITE]SiteData{
 		Ft: "221",
 		Url: "https://www.walmart.com/",
 		Host: "walmart.com",
-		Key: "pxu6b0qd2s",
+		AppId: "pxu6b0qd2s",
 	},
 }

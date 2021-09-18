@@ -7,6 +7,7 @@ import (
 	"github.com/ProjectAthenaa/perimeterx-service/responsedeob"
 	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
 	px "github.com/ProjectAthenaa/sonic-core/sonic/antibots/perimeterx"
+	"github.com/prometheus/common/log"
 	"math/rand"
 	"time"
 )
@@ -16,49 +17,49 @@ type Server struct {
 }
 
 func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.ConstructPayloadResponse, error) {
+	//log.Info("args received")
 	rand.Seed(time.Now().UnixNano())
-	SITE := siteconstants.SiteDataHolder[payload.Site]
-	TYPE := payload.Type
+	site := siteconstants.SiteDataHolder[payload.Site]
 
-	var UUID, TOKEN, COOKIE string
-	var RSC int
-	var resobj responsedeob.ResponseJSON
-
-	if TYPE == px.PXType_PX3 || TYPE == px.PXType_PX34 {
-		UUID = generator.GenerateUUID()
-	} else if TYPE == px.PXType_HCAPHIGH || TYPE == px.PXType_RECAP || TYPE == px.PXType_HCAPLOW {
-		COOKIE, resobj = responsedeob.SplitResponse(payload.ResponseObject)
-		TOKEN = resobj.HTMLCITOKEN
-	} else {
-		COOKIE, resobj = responsedeob.SplitResponse(payload.ResponseObject)
-		RSC = int(payload.RSC)
-	}
-
-	switch TYPE {
-	case px.PXType_PX3, px.PXType_PX34:
-		bytePayload, err := generator.GenInit(&SITE, UUID)
+	//log.Info(TYPE)
+	switch payload.Type {
+	case px.PXType_PX2:
+		bytePayload, err := generator.GenPX2(&site, generator.GenerateUUID())
+		log.Info(string(bytePayload))
 		return &px.ConstructPayloadResponse{
-			Cookie:  COOKIE,
+			Cookie:  "",
+			Payload: bytePayload,
+		}, err
+	case px.PXType_PX3, px.PXType_PX34:
+		cookie, resObj := responsedeob.SplitResponse(payload.ResponseObject)
+		bytePayload, err := generator.GenPX3(&site, payload.Uuid, resObj)
+		log.Info(string(bytePayload))
+		return &px.ConstructPayloadResponse{
+			Cookie:  cookie,
 			Payload: bytePayload,
 		}, err
 	case px.PXType_RE, px.PXType_BRE, px.PXType_MME, px.PXType_MOE, px.PXType_UAE, px.PXType_EVENT:
-		bytePayload, err := generator.GenEvents(&SITE, UUID, resobj, RSC)
+		cookie, resObj := responsedeob.SplitResponse(payload.ResponseObject)
+		bytePayload, err := generator.GenEvents(&site, payload.Uuid, resObj, int(payload.RSC))
 		return &px.ConstructPayloadResponse{
-			Cookie:  COOKIE,
+			Cookie:  cookie,
 			Payload: bytePayload,
 		}, err
 	case px.PXType_HCAPHIGH, px.PXType_HCAPLOW:
-		bytePayload, err := generator.GenHoldCaptcha(&SITE, UUID, resobj, TOKEN)
+		cookie, resobj := responsedeob.SplitResponse(payload.ResponseObject)
+		bytePayload, err := generator.GenHoldCaptcha(&site, payload.Uuid, resobj, resobj.HTMLCITOKEN)
 		return &px.ConstructPayloadResponse{
-			Cookie:  COOKIE,
+			Cookie:  cookie,
 			Payload: bytePayload,
 		}, err
-	case px.PXType_RECAP:
-		bytePayload, err := generator.GenReCaptcha(&SITE, UUID, resobj)
-		return &px.ConstructPayloadResponse{
-			Cookie:  COOKIE,
-			Payload: bytePayload,
-		}, err
+	//todo implement
+	//case px.PXType_RECAP:
+	//	cookie, resobj := responsedeob.SplitResponse(payload.ResponseObject)
+	//	bytePayload, err := generator.GenReCaptcha(&site, payload.Uuid, resobj)
+	//	return &px.ConstructPayloadResponse{
+	//		Cookie:  cookie,
+	//		Payload: bytePayload,
+	//	}, err
 	}
 
 	return nil, errors.New("could not create payload")
