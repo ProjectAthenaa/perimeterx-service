@@ -8,6 +8,7 @@ import (
 var json = jsoniter.ConfigFastest
 
 type ResponseJSON struct{
+	CS		string `json:"cs"`
 	SID  	string `json:"sid"`
 	VID  	string `json:"vid"`
 	CLS0 	string `json:"cls0"`
@@ -36,6 +37,8 @@ func SplitResponse(resstring []byte) (string, ResponseJSON){
 	for _, val := range rp.Do{
 		split := strings.Split(val, "|")
 		switch split[0]{
+			case "cs":
+				resobj.CS = split[1]
 			case "sid":
 				resobj.SID = split[1]
 			case "vid":

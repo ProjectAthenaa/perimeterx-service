@@ -26,6 +26,8 @@ type PayloadOut struct{
 	Vid		string `json:"vid,omitempty"`
 	Cts		string `json:"cts,omitempty"`
 	Rsc		string `json:"rsc"`
+	Cs		string `json:"cs"`
+	Ci		string `json:"ci"`
 }
 
 func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
@@ -65,6 +67,7 @@ func GenPX3(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.R
 		Vid:     resobj.VID,
 		Cts:     resobj.CTS,
 		Rsc:     "2",
+		Cs:		resobj.CS,
 	})
 }
 
@@ -107,6 +110,8 @@ func GenEvents(sitedata *siteconstants.SiteData, UUID string, resobj responsedeo
 		Vid:     resobj.VID,
 		Cts:     resobj.CTS,
 		Rsc:     "3",
+		Cs:		resobj.CS,
+
 	})
 }
 
@@ -129,6 +134,7 @@ func GenHoldCaptcha(sitedata *siteconstants.SiteData, UUID string, resobj respon
 		Vid:     resobj.VID,
 		Cts:     resobj.CTS,
 		Rsc:     "3",
+		Ci: resobj.CI,
 	})
 }
 

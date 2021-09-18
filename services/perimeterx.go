@@ -21,11 +21,9 @@ func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.
 	rand.Seed(time.Now().UnixNano())
 	site := siteconstants.SiteDataHolder[payload.Site]
 
-	//log.Info(TYPE)
 	switch payload.Type {
 	case px.PXType_PX2:
-		bytePayload, err := generator.GenPX2(&site, generator.GenerateUUID())
-		log.Info(string(bytePayload))
+		bytePayload, err := generator.GenPX2(&site, payload.Uuid)
 		return &px.ConstructPayloadResponse{
 			Cookie:  "",
 			Payload: bytePayload,
