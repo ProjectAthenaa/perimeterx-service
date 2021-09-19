@@ -31,7 +31,8 @@ type PayloadOut struct{
 }
 
 func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
-	rp, err := json.Marshal(GeneratePX2(UUID, sitedata))
+	px2obj := GeneratePX2(UUID, sitedata)
+	rp, err := json.Marshal(px2obj)
 	if err != nil{
 		return nil, err
 	}

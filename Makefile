@@ -22,3 +22,6 @@ scratchDeploy:
 	docker push registry.digitalocean.com/athenabot/antibots/perimeterx:latest
 	make kubeCreate
 	kubectl rollout status deployments perimeterx -n antibots
+
+tidy:
+	go mod tidy -compat=1.17

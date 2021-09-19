@@ -2,6 +2,7 @@ package responsedeob
 
 import (
 	"github.com/json-iterator/go"
+	"github.com/prometheus/common/log"
 	"strings"
 )
 
@@ -20,6 +21,7 @@ type ResponseJSON struct{
 	CTS 	string `json:"cts"`
 	CITOKEN string `json:"citoken"`
 	HTMLCITOKEN string `json:"htmlcitoken"`
+	EN		string `json:"en"`
 }
 
 type ResponseJSONRaw struct{
@@ -27,8 +29,8 @@ type ResponseJSONRaw struct{
 }
 
 func SplitResponse(resstring []byte) (string, ResponseJSON){
-	var rp ResponseJSONRaw
-	json.Unmarshal(resstring, rp)
+	var rp *ResponseJSONRaw
+	json.Unmarshal(resstring, &rp)
 
 	var resobj ResponseJSON
 	var cookie string
@@ -36,6 +38,7 @@ func SplitResponse(resstring []byte) (string, ResponseJSON){
 	Iterator:
 	for _, val := range rp.Do{
 		split := strings.Split(val, "|")
+		log.Info(split)
 		switch split[0]{
 			case "cs":
 				resobj.CS = split[1]
@@ -58,9 +61,12 @@ func SplitResponse(resstring []byte) (string, ResponseJSON){
 				resobj.CTS = split[1]
 			case "cp":
 				resobj.CP = split[2]
-			case "en", "bake":
+			case "bake":
 				cookie = split[3]
+			case "en":
+				resobj.EN = split[3]
 				break Iterator
+
 		}
 	}
 

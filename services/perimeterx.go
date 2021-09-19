@@ -31,7 +31,6 @@ func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.
 	case px.PXType_PX3, px.PXType_PX34:
 		cookie, resObj := responsedeob.SplitResponse(payload.ResponseObject)
 		bytePayload, err := generator.GenPX3(&site, payload.Uuid, resObj)
-		log.Info(string(bytePayload))
 		return &px.ConstructPayloadResponse{
 			Cookie:  cookie,
 			Payload: bytePayload,
@@ -64,6 +63,15 @@ func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.
 }
 
 func (s Server) GetCookie(ctx context.Context, req *px.GetCookieRequest) (*px.Cookie, error){
+	log.Info(string(req.PXResponse))
 	cookie, _ := responsedeob.SplitResponse(req.PXResponse)
+	log.Info(cookie)
 	return &px.Cookie{Value: cookie}, nil
+}
+
+func (s Server) GetPXde(ctx context.Context, req *px.GetCookieRequest) (*px.Cookie, error){
+	log.Info(string(req.PXResponse))
+	_, resobj := responsedeob.SplitResponse(req.PXResponse)
+	log.Info(resobj.EN)
+	return &px.Cookie{Name:"_pxde", Value: resobj.EN}, nil
 }
