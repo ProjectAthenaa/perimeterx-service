@@ -4,8 +4,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/ProjectAthenaa/pxutils v0.0.0-20210702193639-a356eb9a7e3b h1:IMmJl/yeWerveFyQoMhs5KNL9XjM6fi4Ck+2zYMi010=
 github.com/ProjectAthenaa/pxutils v0.0.0-20210702193639-a356eb9a7e3b/go.mod h1:nf9JR1cgjaAYNbkfQ/+NNXOVRm3ce9HPUGkLaK2OBN8=
-github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063107-642d70ccb6f8 h1:xZjHnGngX6qDnZqNQILqED4jANW8qSo5Z7jvpjC+00A=
-github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063107-642d70ccb6f8/go.mod h1:mw4aPsWcDicwj8Vy9JdXT1kQkdc/fYzSSrzrig6WTP8=
+github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063931-4c1553ec2533 h1:PS0+3xaJDcnvxSiU4e4LVhmyAYTECQKh4B/SROzMihM=
+github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063931-4c1553ec2533/go.mod h1:mw4aPsWcDicwj8Vy9JdXT1kQkdc/fYzSSrzrig6WTP8=
 github.com/alecthomas/template v0.0.0-20160405071501-a0175ee3bccc/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 h1:JYp7IbQjafoB+tBA3gMyHYHrpOtNuDiK/uB5uXxq5wM=
 github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751/go.mod h1:LOuyumcjzFXgccqObfd/Ljyb9UuFJ6TxHnclSeseNhc=

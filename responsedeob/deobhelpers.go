@@ -2,7 +2,6 @@ package responsedeob
 
 import (
 	"github.com/json-iterator/go"
-	"github.com/prometheus/common/log"
 	"strings"
 )
 
@@ -38,7 +37,6 @@ func SplitResponse(resstring []byte) (string, ResponseJSON){
 	Iterator:
 	for _, val := range rp.Do{
 		split := strings.Split(val, "|")
-		log.Info(split)
 		switch split[0]{
 			case "cs":
 				resobj.CS = split[1]
@@ -48,7 +46,9 @@ func SplitResponse(resstring []byte) (string, ResponseJSON){
 				resobj.VID = split[1]
 			case "cls":
 				resobj.CLS0 = split[1]
-				resobj.CLS1 = split[2]
+				if len(split) >= 3{
+					resobj.CLS1 = split[2]
+				}
 			case "wcs":
 				resobj.WCS = split[1]
 			case "drc":

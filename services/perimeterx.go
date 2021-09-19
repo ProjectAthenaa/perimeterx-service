@@ -7,7 +7,6 @@ import (
 	"github.com/ProjectAthenaa/perimeterx-service/responsedeob"
 	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
 	px "github.com/ProjectAthenaa/sonic-core/sonic/antibots/perimeterx"
-	"github.com/prometheus/common/log"
 	"math/rand"
 	"time"
 )
@@ -63,15 +62,11 @@ func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.
 }
 
 func (s Server) GetCookie(ctx context.Context, req *px.GetCookieRequest) (*px.Cookie, error){
-	log.Info(string(req.PXResponse))
 	cookie, _ := responsedeob.SplitResponse(req.PXResponse)
-	log.Info(cookie)
 	return &px.Cookie{Name: "_px3", Value: cookie}, nil
 }
 
 func (s Server) GetPXde(ctx context.Context, req *px.GetCookieRequest) (*px.Cookie, error){
-	log.Info(string(req.PXResponse))
 	_, resobj := responsedeob.SplitResponse(req.PXResponse)
-	log.Info(resobj.EN)
 	return &px.Cookie{Name:"_pxde", Value: resobj.EN}, nil
 }
