@@ -66,7 +66,7 @@ func (s Server) GetCookie(ctx context.Context, req *px.GetCookieRequest) (*px.Co
 	log.Info(string(req.PXResponse))
 	cookie, _ := responsedeob.SplitResponse(req.PXResponse)
 	log.Info(cookie)
-	return &px.Cookie{Value: cookie}, nil
+	return &px.Cookie{Name: "_px3", Value: cookie}, nil
 }
 
 func (s Server) GetPXde(ctx context.Context, req *px.GetCookieRequest) (*px.Cookie, error){
