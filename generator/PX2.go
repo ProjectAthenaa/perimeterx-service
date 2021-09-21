@@ -8,16 +8,16 @@ import (
 type PX2 struct {
 	T string `json:"t"`
 	D struct {
-		PX371  bool	  `json:"PX371"`
-		PX96   string `json:"PX96"`
 		PX63   string `json:"PX63"`
+		PX96   string `json:"PX96"`
 		PX191  int    `json:"PX191"`
+		PX371  bool	  `json:"PX371"`
 		PX850  int    `json:"PX850"`
 		PX851  int    `json:"PX851"`
 		PX1008 int    `json:"PX1008"`
+		PX1038 string `json:"PX1038"`
 		PX1055 int  `json:"PX1055"`
 		PX1056 int  `json:"PX1056"`
-		PX1038 string `json:"PX1038"`
 	} `json:"d"`
 }
 
