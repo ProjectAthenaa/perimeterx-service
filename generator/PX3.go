@@ -147,18 +147,20 @@ type PX3 struct {
 }
 
 func GeneratePX3(uuid string, resobj responsedeob.ResponseJSON, sitedata *siteconstants.SiteData) []PX3 {
-	px3obj := InstantiatePX3(uuid)
-	px3obj.D.PX983 = resobj.CLS0
-	px3obj.D.PX986 = resobj.CLS1
-	px3obj.D.PX985, _ = strconv.Atoi(resobj.DRC)
-	px3obj.D.PX943 = resobj.WCS
+	px3obj := InstantiatePX3()
+	px3obj.D.PX96 = sitedata.Url
 	px3obj.D.PX357 = pxutils.H1(resobj.VID, siteconstants.UA)
 	px3obj.D.PX358 = pxutils.H1(resobj.SID, siteconstants.UA)
-	px3obj.D.PX96 = sitedata.Url
+	px3obj.D.PX359 = pxutils.H1(uuid, siteconstants.UA)
+	px3obj.D.PX943 = resobj.WCS
+	px3obj.D.PX983 = resobj.CLS0
+	px3obj.D.PX985, _ = strconv.Atoi(resobj.DRC)
+	px3obj.D.PX986 = resobj.CLS1
+	px3obj.D.PX1038 = uuid
 	return []PX3{px3obj}
 }
 
-func InstantiatePX3(uuid string) PX3 {
+func InstantiatePX3() PX3 {
 	var payload PX3
 	payload.T = "PX3"
 	payload.D.PX55 = ""
@@ -192,9 +194,8 @@ func InstantiatePX3(uuid string) PX3 {
 	payload.D.PX152 = false
 	payload.D.PX153 = false
 	payload.D.PX154 = 240
-	//
-	time.Now().Local().Format("Mon Jan 02 2006 15:04:05 GMT-0700 ")
-	payload.D.PX155 = "Fri Apr 02 2021 00:31:32 GMT-0400 (Eastern Daylight Time)" // timezone
+	payload.D.PX155 = time.Now().Local().Format("Mon Jan 02 2006 15:04:05 GMT-0700")
+	//payload.D.PX155 = "Fri Apr 02 2021 00:31:32 GMT-0400 (Eastern Daylight Time)" // timezone
 	payload.D.PX166 = true
 	payload.D.PX169 = 4 //most likely core count
 	payload.D.PX170 = 3
@@ -230,12 +231,11 @@ func InstantiatePX3(uuid string) PX3 {
 	payload.D.PX270 = 1080
 	payload.D.PX313 = []string{"en-US"}
 	payload.D.PX314 = false
-	payload.D.PX359 = pxutils.H1(uuid, siteconstants.UA)
 	payload.D.PX371 = true
 	payload.D.PX399 = "false"
 	payload.D.PX400 = 111
 	payload.D.PX402 = 1
-	payload.D.PX404 = "144|54|54|180|68"
+	payload.D.PX404 = "144|66|66|180|80"
 	payload.D.PX405 = true
 	payload.D.PX411 = 1
 	payload.D.PX443 = true
@@ -265,7 +265,6 @@ func InstantiatePX3(uuid string) PX3 {
 	payload.D.PX1025 = false
 	payload.D.PX1033 = "e0eaf10e"
 	payload.D.PX1035 = false
-	payload.D.PX1038 = uuid
 	payload.D.PX1054 = time.Now().Unix()
 	payload.D.PX1055 = time.Now().Unix()-1000
 	payload.D.PX1056 = time.Now().Unix()+1000
