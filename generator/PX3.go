@@ -13,7 +13,7 @@ import (
 type PX3 struct {
 	T string `json:"t"`
 	D struct {
-		PX34   string        `json:"px_34"`
+		PX34   string        `json:"PX34"`
 		PX55   string        `json:"PX55"`
 		PX59   string        `json:"PX59"`
 		PX60   bool          `json:"PX60"`
@@ -129,29 +129,29 @@ type PX3 struct {
 		PX1055 int64         `json:"PX1055"`
 		PX1056 int64         `json:"PX1056"`
 		PX1065 int           `json:"PX1065"`
-		PX1139 bool          `json:"px_1139"`
-		PX1142 int           `json:"px_1142"`
-		PX1143 int           `json:"px_1143"`
-		PX1144 bool          `json:"px_1144"`
-		PX1146 int           `json:"px_1146"`
-		PX1147 int           `json:"px_1147"`
-		PX1152 int           `json:"px_1152"`
-		PX1153 int           `json:"px_1153"`
-		PX1154 bool          `json:"px_1154"`
-		PX1155 string        `json:"px_1155"`
-		PX1157 int           `json:"px_1157"`
-		PX1173 int           `json:"px_1173"`
-		PX1179 bool          `json:"px_1179"`
-		PX1180 bool          `json:"px_1180"`
+		PX1139 bool          `json:"PX1139"`
+		PX1142 int           `json:"PX1142"`
+		PX1143 int           `json:"PX1143"`
+		PX1144 bool          `json:"PX1144"`
+		PX1146 int           `json:"PX1146"`
+		PX1147 int           `json:"PX1147"`
+		PX1152 int           `json:"PX1152"`
+		PX1153 int           `json:"PX1153"`
+		PX1154 bool          `json:"PX1154"`
+		PX1155 string        `json:"PX1155"`
+		PX1157 int           `json:"PX1157"`
+		PX1173 int           `json:"PX1173"`
+		PX1179 bool          `json:"PX1179"`
+		PX1180 bool          `json:"PX1180"`
 	} `json:"d"`
 }
 
 func GeneratePX3(uuid string, resobj responsedeob.ResponseJSON, sitedata *siteconstants.SiteData) []PX3 {
 	px3obj := InstantiatePX3()
 	px3obj.D.PX96 = sitedata.Url
-	px3obj.D.PX357 = pxutils.H1(resobj.VID, siteconstants.UA)
-	px3obj.D.PX358 = pxutils.H1(resobj.SID, siteconstants.UA)
-	px3obj.D.PX359 = pxutils.H1(uuid, siteconstants.UA)
+	px3obj.D.PX357 = pxutils.H12(pxutils.H1(resobj.VID, siteconstants.UA))
+	px3obj.D.PX358 = pxutils.H12(pxutils.H1(resobj.SID, siteconstants.UA))
+	px3obj.D.PX359 = pxutils.H12(pxutils.H1(uuid, siteconstants.UA))
 	px3obj.D.PX943 = resobj.WCS
 	px3obj.D.PX983 = resobj.CLS0
 	px3obj.D.PX985, _ = strconv.Atoi(resobj.DRC)

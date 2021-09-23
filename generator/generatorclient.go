@@ -6,6 +6,7 @@ import (
 	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
 	"github.com/ProjectAthenaa/pxutils"
 	jsoniter "github.com/json-iterator/go"
+	"log"
 	"math/rand"
 	"strconv"
 )
@@ -52,6 +53,7 @@ func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
 
 func GenPX3(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.ResponseJSON) ([]byte, error){
 	rp, err := json.Marshal(GeneratePX3(UUID, resobj, sitedata))
+	log.Println(string(rp))
 	if err != nil{
 		return nil, err
 	}
