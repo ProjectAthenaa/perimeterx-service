@@ -20,6 +20,7 @@ type ResponseJSON struct{
 	CTS 	string `json:"cts"`
 	CITOKEN string `json:"citoken"`
 	HTMLCITOKEN string `json:"htmlcitoken"`
+	STS string `json:"sts"`
 	EN		string `json:"en"`
 }
 
@@ -66,7 +67,8 @@ func SplitResponse(resstring []byte) (string, ResponseJSON){
 			case "en":
 				resobj.EN = split[3]
 				break Iterator
-
+		case "sts":
+			resobj.STS = split[1]
 		}
 	}
 
