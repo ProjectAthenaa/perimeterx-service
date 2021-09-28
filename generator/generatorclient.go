@@ -50,6 +50,8 @@ func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
 		Rsc:     "1",
 	})
 }
+
+
 //px3
 //"PX1061": [
 //        {
