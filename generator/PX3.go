@@ -13,19 +13,20 @@ import (
 type PX3 struct {
 	T string `json:"t"`
 	D struct {
-		PX34   string        `json:"PX34,omitempty"`
-		PX55   string        `json:"PX55,omitempty"`
-		PX59   string        `json:"PX59,omitempty"`
-		PX60   bool          `json:"PX60,omitempty"`
-		PX61   string        `json:"PX61,omitempty"`
-		PX62   string        `json:"PX62,omitempty"`
-		PX63   string        `json:"PX63,omitempty"`
-		PX64   string        `json:"PX64,omitempty"`
-		PX65   string        `json:"PX65,omitempty"`
-		PX66   string        `json:"PX66,omitempty"`
-		PX68   bool          `json:"PX68,omitempty"`
-		PX69   string        `json:"PX69,omitempty"`
-		PX85   []string      `json:"PX85,omitempty"`
+		CALCKEY string   `json:"calckey"`
+		PX34    string   `json:"PX34,omitempty"`
+		PX55    string   `json:"PX55,omitempty"`
+		PX59    string   `json:"PX59,omitempty"`
+		PX60    bool     `json:"PX60,omitempty"`
+		PX61    string   `json:"PX61,omitempty"`
+		PX62    string   `json:"PX62,omitempty"`
+		PX63    string   `json:"PX63,omitempty"`
+		PX64    string   `json:"PX64,omitempty"`
+		PX65    string   `json:"PX65,omitempty"`
+		PX66    string   `json:"PX66,omitempty"`
+		PX68    bool     `json:"PX68,omitempty"`
+		PX69    string   `json:"PX69,omitempty"`
+		PX85    []string `json:"PX85,omitempty"`
 		//PX86   bool          `json:"PX86,omitempty"`
 		PX87   bool          `json:"PX87,omitempty"`
 		PX88   bool          `json:"PX88,omitempty"`
@@ -169,6 +170,7 @@ type PX3 struct {
 func GeneratePX3(uuid string, resobj responsedeob.ResponseJSON, sitedata *siteconstants.SiteData) []PX3 {
 	px3obj := InstantiatePX3()
 	px3obj.D.PX96 = sitedata.Url
+	px3obj.D.CALCKEY = "calval"
 	px3obj.D.PX357 = pxutils.H12(pxutils.H1(resobj.VID, siteconstants.UA))
 	px3obj.D.PX358 = pxutils.H12(pxutils.H1(resobj.SID, siteconstants.UA))
 	px3obj.D.PX359 = pxutils.H12(pxutils.H1(uuid, siteconstants.UA))
@@ -311,8 +313,8 @@ func InstantiatePX3() PX3 {
 	payload.D.PX1033 = "e0eaf10e"
 	payload.D.PX1035 = false
 	payload.D.PX1054 = time.Now().UnixMilli()
-	payload.D.PX1055 = time.Now().UnixMilli()-1000
-	payload.D.PX1056 = time.Now().UnixMilli()+1000
+	payload.D.PX1055 = time.Now().UnixMilli() - 1000
+	payload.D.PX1056 = time.Now().UnixMilli() + 1000
 	payload.D.PX1065 = 1
 	payload.D.PX1139 = false
 	payload.D.PX1142 = 2

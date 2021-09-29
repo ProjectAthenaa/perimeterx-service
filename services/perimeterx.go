@@ -48,6 +48,7 @@ func (s Server) ConstructPayload(ctx context.Context, payload *px.Payload) (*px.
 			Cookie:  cookie,
 			Payload: bytePayload,
 		}, err
+
 	//todo implement
 	//case px.PXType_RECAP:
 	//	cookie, resobj := responsedeob.SplitResponse(payload.ResponseObject)
