@@ -7,7 +7,6 @@ import (
 	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
 	"github.com/ProjectAthenaa/pxutils"
 	jsoniter "github.com/json-iterator/go"
-	"log"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -54,26 +53,9 @@ func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
 }
 
 
-// todo:
-//   add math key/val
-//	 add this to px3
-//"PX1061": [
-//        {
-//          "tagName": "INPUT",
-//          "id": "",
-//          "type": "search",
-//          "name": "q",
-//          "height": 39.9974365234375,
-//          "width": 31.992826461791992,
-//          "x": 394.3135070800781,
-//          "y": 23.988216400146484
-//        }
-//      ],
-
 func GenPX3(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.ResponseJSON) ([]byte, error){
 	raw, err := json.Marshal(GeneratePX3(UUID, resobj, sitedata))
 	rp := string(raw)
-	log.Println(rp)
 	sts, err := strconv.Atoi(resobj.STS)
 	if err != nil{
 		return nil, errors.New("could not read sts value")
