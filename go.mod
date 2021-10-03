@@ -3,7 +3,7 @@ module github.com/ProjectAthenaa/perimeterx-service
 go 1.17
 
 require (
-	github.com/ProjectAthenaa/pxutils v0.0.0-20211003192119-77e5a7407d04
+	github.com/ProjectAthenaa/pxutils v0.0.0-20211003195928-74979efd48d7
 	github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063931-4c1553ec2533
 	github.com/json-iterator/go v1.1.12
 	google.golang.org/grpc v1.40.0

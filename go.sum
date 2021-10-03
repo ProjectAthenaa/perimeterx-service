@@ -2,8 +2,8 @@ cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMT
 cloud.google.com/go v0.34.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
-github.com/ProjectAthenaa/pxutils v0.0.0-20211003192119-77e5a7407d04 h1:k7n0s0oPQhBlotA3t4Lv02twA+py84aJVEp+CnuVPQI=
-github.com/ProjectAthenaa/pxutils v0.0.0-20211003192119-77e5a7407d04/go.mod h1:P5Lf+KiXwMhsWFXUZJIM0ORlUflqZT9HoaaV2WhLp3M=
+github.com/ProjectAthenaa/pxutils v0.0.0-20211003195928-74979efd48d7 h1:zSq3US9PVNbotC7pfzuugss6ZruOKLu3C60sUv0Gm5U=
+github.com/ProjectAthenaa/pxutils v0.0.0-20211003195928-74979efd48d7/go.mod h1:P5Lf+KiXwMhsWFXUZJIM0ORlUflqZT9HoaaV2WhLp3M=
 github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063931-4c1553ec2533 h1:PS0+3xaJDcnvxSiU4e4LVhmyAYTECQKh4B/SROzMihM=
 github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063931-4c1553ec2533/go.mod h1:mw4aPsWcDicwj8Vy9JdXT1kQkdc/fYzSSrzrig6WTP8=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
