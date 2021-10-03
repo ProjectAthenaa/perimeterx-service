@@ -34,7 +34,7 @@ func InstantiatePX2(uuid string) PX2{
 	payload.D.PX63 = "Win32"
 	payload.D.PX191 = 0
 	payload.D.PX850 = 0
-	payload.D.PX851 = 500 + rand.Intn(100)
+	payload.D.PX851 = 1000 + rand.Intn(100)
 	payload.D.PX1008 = 3600
 	payload.D.PX1055 = GenerateTimestamp()
 	payload.D.PX1056 = GenerateTimestamp()

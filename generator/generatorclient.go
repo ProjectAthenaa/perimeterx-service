@@ -34,20 +34,21 @@ type PayloadOut struct{
 
 func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
 	px2obj := GeneratePX2(UUID, sitedata)
-	rp, err := json.Marshal(px2obj)
+	raw, err := json.Marshal(px2obj)
 	if err != nil{
 		return nil, err
 	}
-
+	rp := string(raw)
+	//rp = `[{"t":"PX2","d":{"PX96":"https://www.walmart.com/","PX63":"Win32","PX191":0,"PX850":0,"PX851":948,"PX1008":3600,"PX1055":1632991480058,"PX1056":1632991480061,"PX1038":"a6679780-21ca-11ec-8ec8-d7f0dba116a5","PX371":true}}]`
 	return json.Marshal(&PayloadOut{
-		Payload: pxutils.EncodePayload(string(rp), 50),
+		Payload: pxutils.EncodePayload(rp, 50),
 		AppID:   sitedata.AppId,
 		Tag:     sitedata.Tag,
 		Uuid:    UUID,
 		Ft:      sitedata.Ft,
 		Seq:     "0",
 		En:      "NTA",
-		Pc:      pxutils.CreatePC(string(rp), fmt.Sprintf(`%s:%s:%s`, UUID, sitedata.Tag, sitedata.Ft)),
+		Pc:      pxutils.CreatePC(rp, fmt.Sprintf(`%s:%s:%s`, UUID, sitedata.Tag, sitedata.Ft)),
 		Rsc:     "1",
 	})
 }
