@@ -4,8 +4,8 @@ github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03
 github.com/OneOfOne/xxhash v1.2.2/go.mod h1:HSdplMjZKSmBqAxg5vPj2TmRDmfkzw+cTzAElWljhcU=
 github.com/ProjectAthenaa/pxutils v0.0.0-20211003195928-74979efd48d7 h1:zSq3US9PVNbotC7pfzuugss6ZruOKLu3C60sUv0Gm5U=
 github.com/ProjectAthenaa/pxutils v0.0.0-20211003195928-74979efd48d7/go.mod h1:P5Lf+KiXwMhsWFXUZJIM0ORlUflqZT9HoaaV2WhLp3M=
-github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063931-4c1553ec2533 h1:PS0+3xaJDcnvxSiU4e4LVhmyAYTECQKh4B/SROzMihM=
-github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063931-4c1553ec2533/go.mod h1:mw4aPsWcDicwj8Vy9JdXT1kQkdc/fYzSSrzrig6WTP8=
+github.com/ProjectAthenaa/sonic-core v0.0.0-20211007180452-57c23bbf9e26 h1:FulQ4I1hM3hVKwqtFwi1LYcT02M55wktUnc9tcQ2znI=
+github.com/ProjectAthenaa/sonic-core v0.0.0-20211007180452-57c23bbf9e26/go.mod h1:QyQEpaGTyrsDoa1Qj+ov4t6Fj9/1RwHudlT+RIKZAU0=
 github.com/antihax/optional v1.0.0/go.mod h1:uupD/76wgC+ih3iEmQUL+0Ugr19nfwCT1kdvxnR2qWY=
 github.com/census-instrumentation/opencensus-proto v0.2.1/go.mod h1:f6KPmirojxKA12rnyqOA5BBL4O983OfeGPqjHWSTneU=
 github.com/cespare/xxhash v1.1.0/go.mod h1:XrSqR1VqqWfGrhpAt58auRo0WTKS1nRRg3ghfAqPWnc=

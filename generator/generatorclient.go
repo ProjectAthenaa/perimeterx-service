@@ -7,6 +7,7 @@ import (
 	"github.com/ProjectAthenaa/perimeterx-service/siteconstants"
 	"github.com/ProjectAthenaa/pxutils"
 	jsoniter "github.com/json-iterator/go"
+	"log"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -33,13 +34,14 @@ type PayloadOut struct{
 }
 
 func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
+	log.Println("got px2 request")
 	px2obj := GeneratePX2(UUID, sitedata)
 	raw, err := json.Marshal(px2obj)
 	if err != nil{
 		return nil, err
 	}
 	rp := string(raw)
-	//rp = `[{"t":"PX2","d":{"PX96":"https://www.walmart.com/","PX63":"Win32","PX191":0,"PX850":0,"PX851":948,"PX1008":3600,"PX1055":1632991480058,"PX1056":1632991480061,"PX1038":"a6679780-21ca-11ec-8ec8-d7f0dba116a5","PX371":true}}]`
+	log.Println("returning px2")
 	return json.Marshal(&PayloadOut{
 		Payload: pxutils.EncodePayload(rp, 50),
 		AppID:   sitedata.AppId,
@@ -55,6 +57,7 @@ func GenPX2(sitedata *siteconstants.SiteData, UUID string) ([]byte, error){
 
 
 func GenPX3(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.ResponseJSON) ([]byte, error){
+	log.Println("got px3 request")
 	raw, err := json.Marshal(GeneratePX3(UUID, resobj, sitedata))
 	rp := string(raw)
 	sts, err := strconv.Atoi(resobj.STS)
@@ -66,6 +69,7 @@ func GenPX3(sitedata *siteconstants.SiteData, UUID string, resobj responsedeob.R
 	if err != nil{
 		return nil, err
 	}
+	log.Println("returning px3")
 	return json.Marshal(&PayloadOut{
 		Payload: pxutils.EncodePayload(rp, 50),
 		AppID:   sitedata.AppId,

@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/ProjectAthenaa/pxutils v0.0.0-20211003195928-74979efd48d7
-	github.com/ProjectAthenaa/sonic-core v0.0.0-20210919063931-4c1553ec2533
+	github.com/ProjectAthenaa/sonic-core v0.0.0-20211007180452-57c23bbf9e26
 	github.com/json-iterator/go v1.1.12
 	google.golang.org/grpc v1.40.0
 )
